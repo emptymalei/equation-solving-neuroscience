@@ -1,0 +1,460 @@
+\documentclass{tufte-handout}
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\title{Cable Equation\thanks{Supplementary to the skeleton notes}}
+\author[OctoMiao]{OctoMiao}
+\date{31 March 2016}  % if the \date{} command is left out, the current date will be used
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% Frame package to frame a paragraph
+\usepackage{framed}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% begin document %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+\maketitle% this prints the handout title, author, and date
+
+
+\begin{abstract}
+\noindent Some notes on cable equation and the solutions using Green's function.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Cable Equatioin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+\section{Cable Equation}
+
+
+The cable equation is written as \cite{Gerstner2002}
+
+\begin{equation}
+    \frac{\partial}{\partial t} u(t,x) = \frac{\partial^2}{\partial x^2} u(t,x) - u(t,x) + i_{e}(t,x), \label{eqn-cable-equation-potential}
+\end{equation}
+
+or
+
+\begin{equation}
+    \frac{\partial}{\partial t} i(t,x) = \frac{\partial^2}{\partial x^2} i(t,x) - i(t,x) + \frac{\partial}{\partial x} i_e (t,x),\label{eqn-cable-equation-current}
+\end{equation}
+
+where $t$, $x$, $i$, $i_e$ are all renormalized unit less quantities. For the meaning and definition of them, ref. page 55 of Gerster 2002\cite{Gerstner2002}.
+
+
+
+\section{Solutions to Cable Equation}
+
+
+\subsection{Stationary Solution}
+
+Equation (\ref{eqn-cable-equation-potential}) can be solved for stationary case, which is
+
+\begin{equation}
+     \frac{\partial^2}{\partial x^2} u(t,x) - u(t,x) =- i_{e}(t,x) .\label{eqn-cable-equation-stationary-equation-potential}
+\end{equation}
+
+While many methods can be used to solve second order nonhonogenerous differential equations, Green's function is the most general and useful one.
+
+
+
+%%%%%%% Definition of Green's Function %%%%%%%
+
+\begin{framed}
+
+{\bf Definition of Green's Function}
+\vspace{1em}
+
+The idea of Green/s function is very simple. TO solve a general solution of equation
+
+\begin{equation*}
+    \frac{d^2}{d x^2} y(x) + y(x) = f(x), 
+    \label{eqn-green-function-example}
+\end{equation*}
+where $f(x)$ is the source and some given boundary conditions. To save ink we define 
+
+\begin{equation}
+    \hat L_x = \frac{d^2}{dx^2} + 1,
+\end{equation}
+which takes a function $y(x)$ to $f(x)$, i.e.,
+
+\begin{equation*}
+    \hat L_x y(x) = f(x).
+    \label{eqn-green-function-example-1}
+\end{equation*}
+
+Now we define the Green's function to be the solution of equation (\ref{eqn-green-function-example-1}) but replacing the source with delta function $\delta(x-z)$
+
+\begin{equation*}
+    \hat L_x G(x,z) = \delta(z-x).
+\end{equation*}
+
+Why do we define this function? The solution to equation (\ref{eqn-green-function-example}) is given by
+
+\begin{equation}
+    y(x) = \int G(x,z) f(z) dz.
+\end{equation}
+
+To verify this conclusion we plug it into the LHS of equation (\ref{eqn-green-function-example})
+
+\begin{align*}
+    & \left(\frac{d^2}{dx^2} +1 \right) \int G(x,z) f(z) dz \\
+=& \int \left[ \left(\frac{d^2}{dx^2} +1 \right) G(x,z) \right] f(z) dz \\
+=& \int \delta(z-x) f(z) dz \\
+=& f(x),
+\end{align*}
+in which we used one of the properties of Dirac delta distribution
+
+\begin{equation*}
+    \int f(z) \delta(z-x) dz = f(x).
+\end{equation*}
+Also note that delta function is even, i.e., $\delta(-x) = \delta(x)$.
+
+So all we need to do to find the solution to a standard second differential equation
+\begin{equation*}
+    \left( \frac{d^2}{dx^2} + p(x) \frac{d}{dx} + q(x) \right)y(x) = f(x)
+\end{equation*}
+is do the following.
+
+\begin{enumerate}
+\item 
+    Find the general form of Green's function (GF) for operator for operator $\hat L_x$.
+\item
+Apply boundary condition (BC) to GF. This might be the most tricky part of this method. Any ways, for a BC of the form $y(a)=0=y(b)$, we can just choose it to vanish at $a$ and $b$. Otherwise we can move this step to the end when no intuition is coming to our mind.
+\item 
+Continuity at $n-2$ order of derivatives at point $x=z$, that is
+\begin{equation*}
+    G^{(n-2)}(x,z) \vert_{x<z} = G^{(n-2)} \vert _{x>z} ,\qquad \text{at } x= z.
+\end{equation*}
+    
+    
+\item
+Discontinuity of the first order derivative at $x=z$, i.e., 
+\begin{equation*}
+    G^{(n-1)}(x,z)\vert_{x>z} - G^{(n-1)}(x,z)\vert_{x<z} = 1, \qquad \text{at } x= z.
+\end{equation*}
+
+This condition comes from the fact that the integral of Dirac delta distribution is Heaviside step function.
+
+\item
+Solve the coefficients to get the GF.
+
+\item
+The solution to an inhomogeneous ODE  $y(x)=f(x)$ is given immediately by
+
+\begin{equation*}
+    y(x) = \int G(x,z) f(z) dz.
+\end{equation*}
+
+If we haven't done step 2 we know would have some unkown coefficients which can be determined by the BC.
+
+\end{enumerate}
+
+
+\end{framed}
+
+
+%%%%% Procedure of Solving Equation Using Green's Function %%%%%%%
+
+
+\begin{framed}
+
+
+{\bf How to Find Green's Function}
+\vspace{1em}
+
+So we are bound to find Green's function. Solving a nonhonogeneous equation with delta as source is as easy as solving homogeneous equations.
+
+We do this by demonstrating an example differential equation. The problem we are going to solve is
+
+\begin{equation*}
+    \left(\frac{d^2}{dx^2} + \frac{1}{4}\right) y(x) = f(x),
+\end{equation*}
+with boundary condition
+\begin{equation}
+y(0) = y(\pi) = 0.\label{eqn-green-function-example2-bc}
+\end{equation}
+
+
+For simplicity we define 
+\begin{equation*}
+    \hat L_x = \frac{d^2}{dx^2} + \frac{1}{4}.
+\end{equation*}
+
+{\bf First of all we find the GF associated with}
+
+\begin{equation*}
+    \hat L_x G(x,z) = \delta(z-x).
+\end{equation*}
+
+We just follow the steps.
+
+\begin{itemize}
+\item The general solution to 
+    \begin{equation*}
+        \hat L_x G(x,z) = 0
+    \end{equation*}
+    is given by
+    \begin{equation*}
+        G(x,z) = \begin{cases}
+        A_1\cos (x/2) + B_1 \sin(x/2), & \qquad x \leq z, \\
+        A_2\cos (x/2) + B_2 \sin(x/2), & \qquad x \geq z.
+        \end{cases}
+    \end{equation*}
+
+
+
+\item Continuity at $x=z$ for the 0th order derivatives,
+\begin{equation*}
+    G(z_-,z) = G(z_+,z),
+\end{equation*}
+which is exactly
+\begin{equation}
+    A_1\cos(z/2) + B_1 \sin(z/2) = A_2 \cos(z/2) + B_2\sin(z/2).\label{eqn-green-function-example2-continuity}
+\end{equation}
+
+\item Discontinuity condition at 1st order derivatives,
+\begin{equation*}
+    \left.\frac{d}{dx} G(x,z)  \right\vert_{x=z_+} - \left.\frac{d}{dx} G(x,z)  \right\vert_{x=z_-} = 1, 
+\end{equation*}
+which is
+\begin{equation}
+    -\frac{A_2}{2}\sin\frac{z}{2} + \frac{B_2}{2} \cos\frac{z}{2} - \left( -\frac{A_1}{2}\sin\frac{z}{2} + \frac{B_1}{2}\cos\frac{z}{2} \right) = 1
+    \label{eqn-green-function-example2-discontinuity}
+\end{equation}
+
+Now we combine (\ref{eqn-green-function-example2-continuity}) and (\ref{eqn-green-function-example2-discontinuity}) to eliminate two degrees of freedom. For example, we can solve out $A_1$ and $B_1$ as a function of all other coefficients. Here we have
+\begin{align*}
+    B_1 &= \frac{ - 2/\sin(z/2) }{\tan(z/2) + \cot(z/2)} + B_2 , \\
+    A_1 &= A_2 + B_2(\tan(z/2)-1) + \frac{2}{\sin(z/2) + \cot(z/2)\cos(z/2)}.
+\end{align*}
+
+\item Write down the form solution using $y(x) = \int G(x,z) f(z) dz$. Then we still have two unknown free coefficients $A_2$ and $B_2$, which in fact is to be determined by the BC equation (\ref{eqn-green-function-example2-bc}).
+
+\end{itemize}
+
+
+\end{framed}
+
+
+
+The stationary equation (\ref{eqn-cable-equation-stationary-equation-potential}) can be written as
+\begin{equation}
+    \hat L_x u(x) = - i_e(t,x),
+\end{equation}
+where $\hat L_x = \frac{d^2}{dx^2} -1$. The boundary condition is the vanishing wave at infinity $u(\pm\infty)=0$. As we are talking about stationary equation, the source should be time-independent, thus we take only a one dimension Dirac distribution $\delta(x)$ to solve for GF.
+
+The general Green's function is\footnote{In fact this is can be obtained by using the Fourier transform method. Check out the box below.}
+\begin{equation*}
+G(x,x') = \begin{cases}
+C_1 e^{-x} + D_1 e^{x}, & \qquad x\leq z,\\
+C_2 e^{-x} + D_2 e^{x}, & \qquad x\geq z.
+\end{cases}
+\end{equation*}
+
+\begin{framed}
+{\bf Solving Homogeneous Equation}
+
+The corresponding homogeneous equation is
+\begin{equation*}
+    \frac{d^2}{dx^2} u(x) - u(x) = 0.
+\end{equation*}
+
+To find the general solution we assume it has the form
+\begin{equation*}
+    u(x) = A e^{\omega x},
+\end{equation*}
+which is then plugged back into the equation,
+
+\begin{equation*}
+    (\omega^2 - 1) u(x) = 0.
+\end{equation*}
+
+We require $\omega^2-1=0$ to make the solution most general, which leads to
+\begin{equation*}
+    \omega = \pm 1.
+\end{equation*}
+
+Finally we write down the general solution to this homogeneous equation,
+\begin{equation*}
+    u(x) = C e^{x} + D e^{-x}.
+\end{equation*}
+
+\end{framed}
+
+In this simple case, BC can be applied to Green's function first
+\footnote{Because the only possibility to make the integral $u(\pm\infty)=\int G(\pm\infty,x') dx'=0$ satisfy $u(\pm\infty)=0$ is to make sure GF vanish on the boundaries.}
+, which means
+\begin{align*}
+    G(-\infty,x') &= 0, \\
+    G(\infty,x') &= 0.
+\end{align*}
+
+These conditions can significantly simplify the GF,
+
+\begin{equation*}
+    G(x,x') = \begin{cases}
+    D_1 e^{x}, & \qquad x<x',\\
+    C_2 e^{-x}, & \qquad x>x'.
+    \end{cases}
+\end{equation*}
+
+Then we use the continuity condition and discontinuity condition,
+
+\begin{align*}
+    G(x'_-,x') - G(x'_+,x') &= 0\\
+    \left.\frac{d}{dx}G(x,x')\right\vert_{x=x'_+} - \left.\frac{d}{dx}G(x,x')\right\vert_{x=x'_-} &= 1,
+\end{align*}
+which is basically
+\begin{align*}
+    D_1 e^{x'} - C_2 e^{-x'} &= 0,\\
+    - C_2 e^{-x'} - D_1 e^{x'} & =1.
+\end{align*}
+
+Solving out the coefficients, we get
+\begin{align*}
+    D_1 & = \frac{1}{2}e^{-x'},\\
+    C_2 &= \frac{1}{2}e^{x'}.
+\end{align*}
+
+Then we reached the complete and final GF,
+\begin{equation*}
+    G(x,x') = \begin{cases}
+    \frac{1}{2}e^{x-x'}, & \qquad x<x'\\
+    \frac{1}{2}e^{x' - x}. & \qquad x>x'
+    \end{cases}
+\end{equation*}
+
+Given any general source $-i_e(t,x)$, we can write down the solution
+\begin{equation*}
+    u(x) = \int G(x,x') (-i_e(t,x') ) dx'.
+\end{equation*}
+
+As a verification, we integrate out for $i_e(t,x) = 1$,
+\begin{equation*}
+    u(x) = -\int_{-\infty}^{x}  \frac{1}{2}e^{x'-x} dx' - \int_{x}^{\infty} \frac{1}{2}e^{x - x'} dx' = 1,
+\end{equation*}
+which is exactly the solution given by Mathematica and makes sense.
+
+
+\subsection{Physical Meaning}
+
+So far we have been dealing with math. What is the actual meaning of GF? To dive into this question we need to review the equation for GF, in this case,
+\begin{equation*}
+   \left(\frac{d^2}{dx^2} -1\right) u(x) = \delta(x'-x).
+\end{equation*}
+
+On the RHS, source term is a delta function, which is just a stimulation to the system at point $x'$. The textbook shows a graph\footnote{C.F. Fig. 2.17} for the case $x'=0$, where we see the stimulation is given for point $x'=0$ and the potential drops as we deviate from the stimulated point.
+
+In a stimulation-response system, one of the most important properties is the resonance width, or reaction width, which means the deviation required for the amplitude to drop to $1/e$ of the peak value. In this stationary solution, the distance is $1$ in renormalized unit. To transform back to to SI unit, recall that the characteristic length is this problem is $\lambda = \sqrt{\frac{r_T}{r_L}}$.
+
+Just to build a picture, this length is around\footnote{Since opening of ion channesl can significantly change the transverse conductivity, this estimation can change significantly in different situations.}
+
+\begin{equation*}
+    \lambda = \sqrt{ \frac{r_T}{r_L}} = \sqrt{ \frac{30\mathrm{k\Omega\cdot cm^2}/(2\pi \rho)}{ 100 \mathrm{k\Omega\cdot cm}/(2\pi \rho) } } = \sqrt{ \frac{5\times 10^{11} \mathrm{\Omega \cdot \mu m} }{ 3\times 10^{5} \mathrm{\Omega \cdot \mu m^{-1}}  } } = 1.2\mathrm{mm}
+\end{equation*}
+
+
+
+
+%%%%%%%%%%%%%%%%%% Non-stationary Solution %%%%%%%%%%%%%
+
+\subsection{Non-stationary Solution}
+
+To solve the most general non-homogeneous cable equation even for non-stationary case, we have to introduce a two-dimensional Dirac distribution $\delta^2(t,x) = \delta(t)\delta(x)$.
+
+Green's function for the most general case should satisfy\cite{Gerstner2002}
+\begin{equation}
+    \frac{\partial}{\partial t} G(t,t';x,x') - \frac{\partial^2}{\partial x^2}  G(t,t';x,x') +  G(t,t';x,x') = \delta(t'-t)\delta(x'-x).
+\end{equation}
+
+Again to save ink we define
+\begin{equation*}
+    \hat L_{t,x} = \hat L_t - \hat L_x,
+\end{equation*}
+where $\hat L_t = \frac{\partial}{\partial t}$ and $\hat L_x = \frac{\partial^2}{\partial x^2} - 1$.
+
+The trick is to solve for time dependence first by Fourier transforming the equation to frequency space. To achieve that, we define
+\begin{equation}
+    G(t,t';x,x') = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty G(t,t';k,x')e^{ikx}dk.\label{eqn-green-function-fourier-transform}
+\end{equation}
+
+On the other hand, Dirac delta is Fourier transformed to
+\begin{equation}
+\delta(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty \delta(\bar x) e^{- ik \bar x} d\bar x = \frac{1}{\sqrt{2\pi}} ,
+    \label{eqn-dirac-delta-fourier-transform}
+\end{equation}
+which infact gives one of the representations of Dirac delta distribution
+\begin{equation}
+    \delta(\bar x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{ik \bar x} dk .
+\end{equation}
+
+Applying the transforms of (\ref{eqn-green-function-fourier-transform}) and (\ref{eqn-dirac-delta-fourier-transform}) to the equation we have
+\begin{equation}
+    \hat L_{t,x}\left( \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty G(t,t';k,x')  e^{i kx} dk \right) = \delta(t'-t) \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}}  e^{i k(x'-x)} dk,
+\end{equation}
+which becomes
+\begin{align*}
+    &\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \frac{\partial}{\partial t}  G(t,t';k,x') e^{ikx}dk - \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty  G(t,t';k,x') \frac{\partial^2}{\partial x^2} e^{ikx}dk  \\
+    &+  \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty G(t,t';k,x')e^{ikx}dk = \delta(t'-t) \frac{1}{\sqrt{2\pi}} \int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{ik(x'-x)} dk,
+\end{align*}
+which is then simplified by removing the integral and common parts
+\begin{equation}
+    \frac{\partial}{\partial t} G(t,t';k,x')  + k^2 G(t,t';k,x') + G(t,t';k,x') = \delta(t'-t) \frac{1}{\sqrt{2\pi}} .
+\end{equation}
+
+Then we solve this first order differential equation.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Reference
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\bibliography{cable-equation}
+\bibliographystyle{plainnat}
+
+
+
+\end{document}
